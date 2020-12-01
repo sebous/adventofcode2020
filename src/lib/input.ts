@@ -1,10 +1,10 @@
-import { readFile } from "fs/promises";
+import { promises as fs } from "fs";
 
-export async function readInputFile(path: string) {
+export async function readInputFile(path: string): Promise<string> {
   try {
-    const data = await readFile(path, { encoding: "utf8" });
+    const data = await fs.readFile(path, { encoding: "utf8" });
     return data;
   } catch (err) {
-    console.log(err);
+    throw Error(err);
   }
 }
