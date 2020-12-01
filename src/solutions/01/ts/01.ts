@@ -1,8 +1,8 @@
 import path from "path";
-import { readInputFile } from "../lib/input";
+import { readInputFile } from "../../../lib/input";
 
 async function part01() {
-  const input = await readInputFile(path.join(__dirname, "data.txt"));
+  const input = await readInputFile(path.join(__dirname, "../data.txt"));
   const data = input.split("\n").map(Number);
 
   for (let x = 0; x < data.length; x++) {
@@ -15,7 +15,7 @@ async function part01() {
 }
 
 async function part02() {
-  const input = await readInputFile(path.join(__dirname, "data.txt"));
+  const input = await readInputFile(path.join(__dirname, "../data.txt"));
   const data = input.split("\n").map(Number);
 
   for (let x = 0; x < data.length; x++) {
