@@ -7,47 +7,47 @@ interface Coord {
   y: number;
 }
 
+interface State {
+  grid: { [key: string]: boolean };
+  treesCount: number;
+  currentPos: Coord;
+  currentGridWidth: number;
+}
+
 const coordToKey = ({ x, y }: Coord) => `${x},${y}`;
 const keyToCoord = (k: string): Coord => {
   const [x, y] = k.split(",").map(Number);
   return { x, y };
 };
 
-const TARGET_X = 3;
-const TARGET_Y = 1;
 let gridWidth = 0;
 let gridHeight = 0;
 const sourceGrid: { [key: string]: boolean } = {};
 
-let currentGrid: { [key: string]: boolean } = {};
-let currentGridWidth = 0;
-let currentPos: Coord = { x: 0, y: 0 };
+function calculateNext(slope: [number, number], state: State): State {
+  let { treesCount, grid, currentPos, currentGridWidth } = state;
+  const [TARGET_X, TARGET_Y] = slope;
 
-let treesEncountered = 0;
-
-function calculateNext(): boolean | undefined {
   const nextPos: Coord = { x: currentPos.x + TARGET_X, y: currentPos.y + TARGET_Y };
-  if (nextPos.y + 1 > gridHeight) return;
+  // if (nextPos.y + 1 > gridHeight) return;
   if (nextPos.x + 1 > currentGridWidth) {
     // copy grid right
     Object.entries(sourceGrid).forEach(([pos, val]) => {
       const coordPos = keyToCoord(pos);
       coordPos.x = coordPos.x + currentGridWidth;
-      currentGrid[coordToKey(coordPos)] = val;
+      grid[coordToKey(coordPos)] = val;
     });
     currentGridWidth += gridWidth;
   }
-  // console.log(nextPos, currentGrid[coordToKey(nextPos)]);
-  if (currentGrid[coordToKey(nextPos)]) {
-    treesEncountered += 1;
+  if (grid[coordToKey(nextPos)]) {
+    treesCount += 1;
   }
-  currentPos = nextPos;
-  return true;
+  currentPos.x = nextPos.x;
+  currentPos.y = nextPos.y;
+  return { currentGridWidth, currentPos, grid, treesCount };
 }
 
-async function run() {
-  const input = await readInputFile(join(__dirname, "../data.txt"));
-
+function createSourceGrid(input: string) {
   input.split("\n").forEach((line, y) => {
     if (y + 1 > gridHeight) {
       gridHeight = y + 1;
@@ -59,12 +59,40 @@ async function run() {
       sourceGrid[coordToKey({ x, y })] = spot === "#";
     });
   });
+}
 
-  currentGrid = cloneDeep(sourceGrid);
-  currentGridWidth = gridWidth;
+function countTreesInSlope(slope: [number, number]) {
+  let grid = cloneDeep(sourceGrid);
+  let currentGridWidth = gridWidth;
+  let treesCount = 0;
+  let currentPos: Coord = { x: 0, y: 0 };
 
-  while (calculateNext()) {}
-  console.log(treesEncountered);
+  let state: State = { grid, currentGridWidth, treesCount, currentPos };
+
+  while (state.currentPos.y + slope[1] + 1 <= gridHeight) {
+    state = calculateNext(slope, state);
+  }
+  return state.treesCount;
+}
+
+const SLOPES: [number, number][] = [
+  [1, 1],
+  [3, 1],
+  [5, 1],
+  [7, 1],
+  [1, 2],
+];
+
+async function run() {
+  const input = await readInputFile(join(__dirname, "../data.txt"));
+  createSourceGrid(input);
+
+  const part1 = countTreesInSlope([3, 1]);
+  console.log(`Part 1: ${part1}`);
+
+  const resultsForSlopes = SLOPES.map((slope) => countTreesInSlope(slope));
+  const part2 = resultsForSlopes.reduce((total, num) => total * num, 1);
+  console.log(`Part 2: ${part2}`);
 }
 
 run();
