@@ -20,16 +20,15 @@ const keyToCoord = (k: string): Coord => {
   return { x, y };
 };
 
-let gridWidth = 0;
-let gridHeight = 0;
 const sourceGrid: { [key: string]: boolean } = {};
+let sourceGridWidth = 0;
+let sourceGridHeight = 0;
 
 function calculateNext(slope: [number, number], state: State): State {
   let { treesCount, grid, currentPos, currentGridWidth } = state;
   const [TARGET_X, TARGET_Y] = slope;
 
   const nextPos: Coord = { x: currentPos.x + TARGET_X, y: currentPos.y + TARGET_Y };
-  // if (nextPos.y + 1 > gridHeight) return;
   if (nextPos.x + 1 > currentGridWidth) {
     // copy grid right
     Object.entries(sourceGrid).forEach(([pos, val]) => {
@@ -37,7 +36,7 @@ function calculateNext(slope: [number, number], state: State): State {
       coordPos.x = coordPos.x + currentGridWidth;
       grid[coordToKey(coordPos)] = val;
     });
-    currentGridWidth += gridWidth;
+    currentGridWidth += sourceGridWidth;
   }
   if (grid[coordToKey(nextPos)]) {
     treesCount += 1;
@@ -49,12 +48,12 @@ function calculateNext(slope: [number, number], state: State): State {
 
 function createSourceGrid(input: string) {
   input.split("\n").forEach((line, y) => {
-    if (y + 1 > gridHeight) {
-      gridHeight = y + 1;
+    if (y + 1 > sourceGridHeight) {
+      sourceGridHeight = y + 1;
     }
     line.split("").forEach((spot, x) => {
-      if (x + 1 > gridWidth) {
-        gridWidth = x + 1;
+      if (x + 1 > sourceGridWidth) {
+        sourceGridWidth = x + 1;
       }
       sourceGrid[coordToKey({ x, y })] = spot === "#";
     });
@@ -62,14 +61,14 @@ function createSourceGrid(input: string) {
 }
 
 function countTreesInSlope(slope: [number, number]) {
-  let grid = cloneDeep(sourceGrid);
-  let currentGridWidth = gridWidth;
-  let treesCount = 0;
-  let currentPos: Coord = { x: 0, y: 0 };
+  let state: State = {
+    grid: cloneDeep(sourceGrid),
+    currentGridWidth: sourceGridWidth,
+    treesCount: 0,
+    currentPos: { x: 0, y: 0 },
+  };
 
-  let state: State = { grid, currentGridWidth, treesCount, currentPos };
-
-  while (state.currentPos.y + slope[1] + 1 <= gridHeight) {
+  while (state.currentPos.y + slope[1] + 1 <= sourceGridHeight) {
     state = calculateNext(slope, state);
   }
   return state.treesCount;
