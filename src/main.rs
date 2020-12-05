@@ -1,10 +1,13 @@
-mod lib;
-#[path ="solutions/01/rust/01.rs"]
+#[path = "solutions/01/rust/01.rs"]
 pub mod day01;
-#[path ="solutions/02/rust/02.rs"]
+#[path = "solutions/02/rust/02.rs"]
 pub mod day02;
+#[path = "solutions/03/rust/03.rs"]
+pub mod day03;
+mod lib;
 
 fn main() {
     // day01::day01();
-    day02::run();
+    // day02::run();
+    day03::run();
 }

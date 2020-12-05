@@ -4,7 +4,6 @@ import { readInputFile } from "../../../lib/input";
 type PassportKey = "byr" | "iyr" | "eyr" | "hgt" | "hcl" | "ecl" | "pid" | "cid";
 const PASSPORT_KEYS = ["byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"];
 type PassportStore = { [key in PassportKey]: string }[];
-type ValidationFn = (passport: { [key in PassportKey]: string }) => boolean;
 
 function parseInput(input: string): PassportStore {
   const lines = input.split("\n");
