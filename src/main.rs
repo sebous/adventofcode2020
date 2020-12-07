@@ -6,11 +6,15 @@ pub mod day02;
 pub mod day03;
 #[path = "solutions/05/rust/05.rs"]
 pub mod day05;
+
+#[path = "solutions/07/rust/07.rs"]
+pub mod day07;
 mod lib;
 
 fn main() {
     // day01::day01();
     // day02::run();
     // day03::run();
-    day05::run();
+    // day05::run();
+    day07::run();
 }
