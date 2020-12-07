@@ -2,7 +2,6 @@ use crate::lib::input::load_input;
 
 struct SeatInfo {
     row: u32,
-    column: u32,
     id: u32,
 }
 
@@ -38,7 +37,6 @@ pub fn run() {
                 }
             });
             return SeatInfo {
-                column: col_high as u32,
                 row: row_high as u32,
                 id: row_high as u32 * 8 + col_high as u32,
             };
