@@ -31,7 +31,7 @@ fn find_first_invalid(data: &Vec<u64>, preamble: usize) -> u64 {
 }
 
 fn find_range_that_sums_to(data: &Vec<u64>, sum: u64) -> &[u64] {
-    'outer: for i in 0..data.len() - 1 {
+    for i in 0..data.len() - 1 {
         for j in i + 1..data.len() - 1 {
             let range = &data[i..j];
             let range_sum = range.iter().sum::<u64>();
@@ -39,7 +39,7 @@ fn find_range_that_sums_to(data: &Vec<u64>, sum: u64) -> &[u64] {
                 return range;
             }
             if range_sum > sum {
-                continue 'outer;
+                break;
             }
         }
     }
