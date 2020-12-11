@@ -3,18 +3,18 @@ use std::collections::HashMap;
 use crate::lib::input::load_input;
 
 fn calculate_differences(input: &Vec<u32>) {
-    let mut oneJolt = 1;
-    let mut threeJolt = 1;
+    let mut one_jolt = 1;
+    let mut three_jolt = 1;
 
     for i in 1..input.len() {
         if input[i] - input[i - 1] == 1 {
-            oneJolt += 1;
+            one_jolt += 1;
         } else if input[i] - input[i - 1] == 3 {
-            threeJolt += 1;
+            three_jolt += 1;
         } else if input[i] - input[i - 1] == 2 {
         }
     }
-    println!("Part 1: {}", oneJolt * threeJolt);
+    println!("Part 1: {}", one_jolt * three_jolt);
 }
 
 fn find_variations(full_input: &Vec<u32>, i: usize, cache: &mut HashMap<usize, usize>) -> usize {

@@ -22,7 +22,7 @@ fn parse_input(input: &String) -> GridInfo {
         }
         for (x, char) in line.chars().enumerate() {
             let coord = (x, y);
-            let mut place = Place::EMPTY;
+            let place: Place;
             if char == 'L' {
                 place = Place::EMPTY
             } else if char == '.' {
@@ -49,7 +49,7 @@ fn get_adjacent_coords(
         return adj_coords.to_owned();
     }
 
-    let (grid, width, height) = grid_info;
+    let (_, width, height) = grid_info;
     let (x, y) = coord;
     let min_x: usize = if x == &0 { 0 } else { x - 1 };
     let max_x: usize = if x == width { *x } else { x + 1 };
@@ -202,7 +202,7 @@ fn count_visible_occupied(grid: &HashMap<Coord, Place>, coord: &Coord) -> u32 {
 
 pub fn run() {
     let input = load_input("src/solutions/11/data.txt");
-    let mut grid_info: GridInfo = parse_input(&input);
+    let grid_info: GridInfo = parse_input(&input);
     let part1 = process_seating_layout(&grid_info, false);
     println!("Part 1: {}", part1);
 
