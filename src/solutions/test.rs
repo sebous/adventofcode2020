@@ -1,4 +1,6 @@
 use itertools::unfold;
+use std::io;
+use std::io::prelude::*;
 
 pub fn run() {
     let mut fibonacci = unfold((1_u32, 1_u32), |state| {
