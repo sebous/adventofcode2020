@@ -91,11 +91,12 @@ fn find_floating_permutations(addr_list: &mut Vec<usize>, addr: usize, floating_
         let (first, rest) = floating_bits.split_first().unwrap();
         let addr_0 = addr & !(1 << first);
         let addr_1 = addr | 1 << first;
-        addr_list.push(addr_0);
-        addr_list.push(addr_1);
         if rest.len() > 0 {
             find_floating_permutations(addr_list, addr_0, rest);
             find_floating_permutations(addr_list, addr_1, rest);
+        } else {
+            addr_list.push(addr_0);
+            addr_list.push(addr_1);
         }
     }
 }
@@ -119,15 +120,9 @@ fn part_two(instructions: &Vec<InstructionV2>) {
                     }
                 }
                 find_floating_permutations(&mut addr_list, addr, &floating_bits[..]);
-                let addr_list_uniq: Vec<usize> = addr_list
-                    .clone()
-                    .iter()
-                    .unique()
-                    .map(|n| n.to_owned())
-                    .collect();
+                // println!("{:?}", addr_list);
 
-                // println!("{:?}", addr_list_uniq);
-                for a in addr_list_uniq {
+                for a in addr_list {
                     memory.insert(a, *val);
                 }
             }
