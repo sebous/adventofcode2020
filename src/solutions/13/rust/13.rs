@@ -42,12 +42,12 @@ fn part_one(data: &(u32, Vec<u32>)) {
     println!("Part 1: {}", result_id * (time - timestamp));
 }
 
-fn part_two(buses: &Vec<u32>) {}
+// fn part_two(buses: &Vec<u32>) {}
 
 pub fn run() {
     let input = load_input("src/solutions/13/data.txt");
     let data = parse_input(&input);
     part_one(&data);
-    let buses_w_x = parse_input_w_x(&input);
-    part_two(&buses_w_x);
+    let _buses_w_x = parse_input_w_x(&input);
+    // part_two(&buses_w_x);
 }
