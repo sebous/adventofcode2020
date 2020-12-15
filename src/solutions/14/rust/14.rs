@@ -10,7 +10,7 @@ enum Instruction {
 }
 
 #[derive(Debug, Clone)]
-enum Instruction_V2 {
+enum InstructionV2 {
     Mask(Vec<char>),
     Write(usize, u64),
 }
@@ -43,19 +43,19 @@ fn parse_input(input: &String) -> Vec<Instruction> {
     return instructions;
 }
 
-fn parse_input_v2(input: &String) -> Vec<Instruction_V2> {
+fn parse_input_v2(input: &String) -> Vec<InstructionV2> {
     let instructions = input
         .lines()
         .map(|l| {
             let (a, b) = l.split(" = ").next_tuple().unwrap();
             if a == "mask" {
                 let value = b.chars().into_iter().collect();
-                return Instruction_V2::Mask(value);
+                return InstructionV2::Mask(value);
             } else {
                 let (a, b) = l.split("] = ").next_tuple().unwrap();
                 let m = a.replace("mem[", "").parse().unwrap();
                 let val = b.parse().unwrap();
-                return Instruction_V2::Write(m, val);
+                return InstructionV2::Write(m, val);
             }
         })
         .collect();
@@ -88,23 +88,25 @@ fn part_one(instructions: &Vec<Instruction>) {
 
 fn find_floating_permutations(addr_list: &mut Vec<usize>, addr: usize, floating_bits: &[usize]) {
     if floating_bits.len() > 0 {
-        let addr_0 = addr & !(1 << floating_bits[0]);
-        let addr_1 = addr | 1 << floating_bits[0];
+        let (first, rest) = floating_bits.split_first().unwrap();
+        let addr_0 = addr & !(1 << first);
+        let addr_1 = addr | 1 << first;
         addr_list.push(addr_0);
         addr_list.push(addr_1);
-        println!("{}", addr_list.len());
-        find_floating_permutations(addr_list, addr_0, &floating_bits[1..]);
-        find_floating_permutations(addr_list, addr_1, &floating_bits[1..]);
+        if rest.len() > 0 {
+            find_floating_permutations(addr_list, addr_0, rest);
+            find_floating_permutations(addr_list, addr_1, rest);
+        }
     }
 }
 
-fn part_two(instructions: &Vec<Instruction_V2>) {
-    // let mut memory = HashMap::new();
+fn part_two(instructions: &Vec<InstructionV2>) {
+    let mut memory = HashMap::new();
     let mut mask = vec![];
     for instr in instructions {
         match instr {
-            Instruction_V2::Mask(val) => mask = val.clone(),
-            Instruction_V2::Write(mut addr, mut val) => {
+            InstructionV2::Mask(val) => mask = val.clone(),
+            InstructionV2::Write(mut addr, val) => {
                 let mut addr_list = vec![];
                 let mut floating_bits = vec![];
                 for (i, bit) in mask.iter().rev().enumerate() {
@@ -117,10 +119,21 @@ fn part_two(instructions: &Vec<Instruction_V2>) {
                     }
                 }
                 find_floating_permutations(&mut addr_list, addr, &floating_bits[..]);
-                println!("{}", addr_list.len());
+                let addr_list_uniq: Vec<usize> = addr_list
+                    .clone()
+                    .iter()
+                    .unique()
+                    .map(|n| n.to_owned())
+                    .collect();
+
+                // println!("{:?}", addr_list_uniq);
+                for a in addr_list_uniq {
+                    memory.insert(a, *val);
+                }
             }
         }
     }
+    println!("Part 2: {}", memory.values().sum::<u64>());
 }
 
 pub fn run() {
