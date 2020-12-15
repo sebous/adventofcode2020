@@ -7,8 +7,7 @@ fn calculate_nth_turn(input: &Vec<u64>, n: u64) {
 
     loop {
         if (turn as usize) - 1 < input.len() {
-            let i = (turn as usize) - 1;
-            last = input[i];
+            last = input[(turn as usize) - 1];
         } else {
             let (t1, t2) = cache.get(&last).unwrap();
             if *t2 == 0 {
