@@ -32,10 +32,10 @@ fn main() {
     // day07::run();
     // day08::run();
     // day09::run();
-    // test::run();
     // day10::run();
     // day11::run();
     // day12::run();
     // day13::run();
+    // test::run();
     day14::run();
 }
