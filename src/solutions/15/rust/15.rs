@@ -26,12 +26,11 @@ fn calculate_nth_turn(input: &Vec<u64>, n: u64) {
             cache.insert(last, (turn, 0));
         }
 
-        turn += 1;
-
-        if turn == n + 1 {
+        if turn == n {
             println!("{}", last);
             break;
         }
+        turn += 1;
     }
 }
 
