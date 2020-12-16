@@ -3,7 +3,7 @@ use std::collections::HashMap;
 fn calculate_nth_turn(input: &Vec<u64>, n: u64) {
     let mut last: u64 = 0;
     let mut turn: u64 = 1;
-    let mut cache: HashMap<u64, (u64, u64)> = HashMap::new();
+    let mut cache = HashMap::new();
 
     loop {
         if (turn as usize) - 1 < input.len() {
