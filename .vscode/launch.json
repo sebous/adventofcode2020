@@ -19,6 +19,7 @@
           "kind": "bin"
         }
       },
+      // "program": "${workspaceFolder}/target/debug/adventofcode2020",
       "args": [],
       "cwd": "${workspaceFolder}"
     },
