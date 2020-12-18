@@ -142,7 +142,6 @@ fn count_active_neighbours_4d(active_set: &ActiveSet4d, pos: &Coord4d) -> i32 {
             }
         }
     }
-    // println!("{}: {:?}", counter, (x, y, z, w));
     return counter;
 }
 
