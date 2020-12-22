@@ -1,5 +1,7 @@
 use std::collections::VecDeque;
 
+use crate::lib::input::load_input;
+
 struct Game {
     player1_deck: VecDeque<u32>,
     player2_deck: VecDeque<u32>,
@@ -53,8 +55,24 @@ impl Game {
     }
 }
 
+fn parse_input(input: &str) -> (Vec<u32>, Vec<u32>) {
+    let decks = input
+        .split("\n\n")
+        .map(|d| {
+            let mut c_lines = d.lines();
+            c_lines.next();
+            c_lines
+                .map(|l| l.parse::<u32>().unwrap())
+                .collect::<Vec<u32>>()
+        })
+        .collect::<Vec<Vec<u32>>>();
+    (decks[0].clone(), decks[1].clone())
+}
+
 pub fn run() {
-    let mut game = Game::new(vec![9, 2, 6, 3, 1], vec![5, 8, 4, 7, 10]);
+    let input = load_input("src/solutions/22/data.txt");
+    let (deck_1, deck_2) = parse_input(&input);
+    let mut game = Game::new(deck_1, deck_2);
     game.play_until_win();
     println!("Part 1: {}", game.calculate_score());
 }
