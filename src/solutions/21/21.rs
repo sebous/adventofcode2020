@@ -25,7 +25,6 @@ fn parse_input(input: &str) -> Vec<Food> {
 }
 
 fn part_one(data: &Vec<Food>) -> HashMap<String, String> {
-    // println!("{:#?}", data);
     let mut possibilities: HashMap<String, Vec<String>> = HashMap::new();
     // allergen -> ingredient
     let mut resolved: HashMap<String, String> = HashMap::new();
@@ -40,8 +39,7 @@ fn part_one(data: &Vec<Food>) -> HashMap<String, String> {
                 continue;
             }
 
-            let mut shared_ingredients = ingr.to_owned();
-            let similar_allergs = data
+            let similar_ingredients = data
                 .iter()
                 .filter(|&f| f != food)
                 .filter(|(_, fa)| fa.contains(a))
@@ -50,9 +48,10 @@ fn part_one(data: &Vec<Food>) -> HashMap<String, String> {
 
             // println!("similar allergs: {:#?}", similar_allergs);
 
-            for &sa in similar_allergs.iter() {
+            let mut shared_ingredients = ingr.to_owned();
+            for &si in similar_ingredients.iter() {
                 shared_ingredients = shared_ingredients
-                    .intersection(sa)
+                    .intersection(si)
                     .map(|s| s.to_owned())
                     .collect();
             }
